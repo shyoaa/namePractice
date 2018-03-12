@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .isActive{
+            padding: 10px;
+            color: red;
+        }
+        .hasError{
+            margin: 5px;
+            border: 1px solid red;
+        }
+        .activeClass{
+            font-size: 28px;
+        }
+        .errorClass{
+            background: gold;
+        }
+    </style>
+</head>
+<body>
+ <div id="demo">
+     <div>ask a question <input type="text" v-model="question"></div>
+     <p class="one" v-bind:class="obj">{{ answer }}</p>
+     <p v-bind:class="obj">是的吗，是的</p>
+     <my-component class="baz boo"></my-component>
+     <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">123www</div>
+     <p v-bind:style="styleObject">美国航空（American Airlines）作为寰宇一家的创始成员之一，是世界最大的航空公司。
+         联合旗下附属美鹰航空和美国连接，美国航空遍布260余个通航城市——包括美国本土150个城市及40个国家的城市。</p>
+
+     <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+
+     <h1 v-if="ok">Yes</h1>
+     <h1 v-else>No</h1>
+
+     <template v-if="ok">
+         <h1>Title</h1>
+         <p>Paragraph 1</p>
+         <p>Paragraph 2</p>
+     </template>
+
+     <ul>
+         <li v-for="(item,key,index) in object" :key="item.id">
+            {{index +1}} : {{key}} : {{item}}
+         </li>
+     </ul>
+     <ol>
+         <template v-for="ii in evenNumbers">
+          <li>
+             {{ii}}
+         </li>
+             <li>123</li>
+         </template>
+     </ol>
+     <div>
+         <span v-for="t in 10">
+             {{t}}
+         </span>
+     </div>
+
+     <ul v-if="numbers.length">
+         <li v-for="n in numbers">{{n}}</li>
+     </ul>
+ </div>
+
+ <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+    Vue.component('my-component', {
+        template : '<p class="foo bar">Hi</p>'
+    })
+    var vm = new Vue({
+        el:"#demo",
+        data: {
+            question: '',
+            answer: 'I cannot give you an answer until you ask a question!',
+
+            obj: {
+                isActive: true,
+                hasError: true
+            },
+            activeColor: 'red',
+            fontSize: 30,
+            styleObject:{
+                color:'#f00',
+                fontSize:'19px'
+            },
+            ok: true,
+            object: {
+                firstName: 'John',
+                lastName: 'Doe',
+                age: 30
+            },
+            numbers: [ 1, 2, 3, 4, 5 ]
+        },
+        computed: {
+            evenNumbers: function () {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        },
+        watch :{ // 侦听器
+            question : function (newV,oldV) {
+                this.answer='Waiting for you to stop typing...'
+                this.getAnswer()
+            }
+        },
+        methods: {
+            even: function (numbers) {
+                return numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            },
+            getAnswer:_.debounce(
+                function () {
+                    if(this.question.indexOf('?') === -1){
+                        this.answer = 'Questions usually contain a question mark. ;-)'
+                        return
+                    }
+                    this.answer ='thinking.....'
+                    var vms = this
+                    axios.get('https://yesno.wtf/api').then(function (response) {
+                        vms.answer =  _.capitalize(response.data.answer);
+                    }).catch(function (error) {
+                        vm.answer = 'Error! Could not reach the API. ' + error
+                    })
+                },500
+            )
+        }
+    })
+</script>
+</body>
+</html>

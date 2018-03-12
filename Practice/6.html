@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title> <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <style>
+        .fade-enter-active,.fade-leave-active{
+            transition: opacity .5s;
+        }
+    </style>
+</head>
+<body>
+
+ <div id="app">
+     <p>{{total}}</p>
+     <button-counter v-on:increment="incrementTotal"></button-counter>
+     <button-counter v-on:increment="incrementTotal"></button-counter>
+     <button-counter v-on:increment="incrementTotal"></button-counter>
+     <p v-for="msg in messages">{{msg}}</p>
+     <button-message v-on:message="handleMessage"></button-message>
+
+     <button v-if="show=!show">toggle</button>
+
+     <transition name="fade">
+         <p v-if="show">hello world</p>
+     </transition>
+ </div>
+
+<script>
+    Vue.component('button-counter',{
+        template:'<button v-on:click="incrementCounter">{{counter}}</button>',
+        data:function () {
+          return{
+              counter : 0
+          }
+        },
+        methods:{
+            incrementCounter :function () {
+                this.counter +=1;
+                this.$emit('increment')
+            }
+        }
+    })
+
+    Vue.component('button-message',{
+        template:`
+         <div>
+            <input type="text" v-model="message">
+            <button v-on:click="handleSendMessage">Send</button>
+         </div>
+        `,
+        data : function () {
+            return{
+                message : 'text message'
+            }
+        },
+        methods:{
+            handleSendMessage:function(){
+                this.$emit('message',{message:this.message})
+            }
+        }
+    })
+    new Vue({
+        el:"#app",
+        data:{
+            total : 0,
+            messages:[],
+            show:true
+        },
+        methods:{
+            incrementTotal :function () {
+                this.total +=1
+            },
+            handleMessage:function (payload) {
+                this.messages.push(payload.message)
+            }
+        }
+    })
+</script>
+</body>
+</html>

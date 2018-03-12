@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+
+<div id="app">
+    <button v-on:click="count >=0 ? count+=1:0">加一</button>
+    <p>{{count}}</p>
+    <button v-on:click="greet">点击</button>
+    <button @click="say('hi')">hi</button><br/><button @click="say('你还')">你还</button>
+    <button @click="warn('Form cannot be submitted yet.', $event)">Submit</button>
+    <my-component></my-component>
+    <my-person></my-person>
+    <my-children mess="hello world"></my-children>
+
+    <input type="text" v-model="parentMsg">
+
+</div>
+
+
+<script>
+    var Child = {
+        template :'<div>A custom component!</div>'
+    }
+    var person = {
+        template :'<div>A custom component!</div>'
+    }
+    var children = {
+        props:['mess'],
+        template:'<div>{{mess}}</div>'
+    }
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            count : 0,
+            parentMsg :'message from parent'
+        },
+        components:{
+             'my-component':Child,
+             'my-person':person,
+             'my-children':children
+        },
+        methods:{
+            greet : function (event) {
+                alert('hello ' + this.count);
+                if(event){
+                    alert(event.target.tagName);
+                }
+            },
+            say : function (message) {
+                alert('hello ' + message);
+            },
+            warn : function (message1,event) {
+                if(event) event.preventDefault();
+                alert(message1);
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

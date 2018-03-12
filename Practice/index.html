@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+
+<div id="app">
+    <div>{{message}}</div>
+    <div v-html="message"></div>
+    <p v-bind:id="'list'+id">en</p>
+    <p v-text="list"></p>
+    <button v-bind:disabled="isButtonDisabled">按钮</button>
+    <p>{{number + 1}}</p><p>{{ok ? "YES" : "No"}}</p>
+    <p>{{message.split('').reverse().join('')}}</p>
+    <p>{{a =2}}</p>
+    <p v-if="seen">现在你看到了</p>
+    <a v-bind:href="url">连接</a>
+    <p>{{time}}</p>
+    <input type="button" v-on:click="dian" value="时间">
+    <form v-on:submit.prevent="onSubmit">...</form>
+    <!--v-bind:href ====> :href  v-on:click ====> @click-->
+    <p> {{ message }}</p>
+    <p> {{ reversedMessage }}</p>
+    <p>{{fullName}}</p>
+</div>
+<script>
+  /*  var data = {x:1};
+    var vm = new Vue({
+       data:data,
+
+    });
+    console.log(vm.x === data.x);
+    data.x=10;
+    console.log(vm.x);
+
+    vm.x =100;
+    console.log(data.x);*/
+
+ var vm = new Vue({
+      el:'#app',
+      data:{
+          id:1,
+          message:'<p style="color: red">这还少一个段落，是的确实是一个段落</p>',
+          list:'语法的使用的情况！！！',
+          isButtonDisabled:true,
+          number:1,
+          ok:false,
+          seen : true,
+          url : 'www.jd.com',
+          time:'',
+          a:12,
+          firstName: 'Foo',
+          lastName: 'Bar',
+      },
+      created: function () {
+          // `this` 指向 vm 实例
+      },
+   /*  watch: {
+         firstName : function (val) {
+             this.fullName = val+ ' ' +this.lastName;
+         },
+         lastName : function (val) {
+             this.fullName =this.firstName + ' ' + val;
+         }
+     },*/
+     computed: {
+         // 计算属性的 getter
+         reversedMessage: function () {
+             // `this` 指向 vm 实例
+             return this.message.split('').reverse().join('')
+         },
+         fullName : function () {
+             return this.firstName +" "+ this.lastName;
+         }
+     },
+     methods : {
+         dian:function () {
+             return this.time = new Date().toLocaleTimeString();
+         },
+     }
+  })
+</script>
+</body>
+</html>

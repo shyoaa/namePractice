@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title> <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+<div id="app">
+    <p v-once>{{msg}}</p> <button v-on:click="change()">点击</button>
+    <div>{{html}}</div>
+    <p v-html="html"></p>
+    <p v-bind:id="a">id 是 1 {{ msg.split('').reverse().join('') }}</p>
+    <p v-if="seen">你看到我了，是的</p>
+    <a v-bind:href="url">vue</a>
+    <p>{{reversedMessage}}</p>
+    <p>{{now}}</p>
+</div>
+   <script>
+       var data = {
+           a : 1 ,
+           newTodoText: '',
+           visitCount: 0,
+           hideCompletedTodos: false,
+           todos: [],
+           error: null,
+           msg :'你好',
+           html:'<p style="color: red">hello world 也是</p>',
+           seen : true,
+           url :'https://cn.vuejs.org/v2/guide/syntax.html'
+       };
+     //  Object.freeze(data); //无法跟踪数组的变化
+       var vm = new Vue({
+          el :"#app",
+          data:data,
+          created: function () {
+             console.log('a is ' + this.a);
+           },
+           computed :{
+               reversedMessage: function () {
+                   // `this` 指向 vm 实例
+                   return this.html.split('').reverse().join('')
+               },
+               now : function () {
+                   return Date.now();
+               }
+           },
+           methods :{
+              change : function () {
+                  this.msg = 'hello'
+              }
+           }
+       });
+    /*   console.log(data.a == vm.a);
+       data.a=10;
+       console.log(vm.a);
+       vm.a =199;
+       console.log(data.a);
+       console.log(vm.$data === data);
+       console.log(vm.$el === document.getElementById('app'));
+       vm.$watch('a',(newV,oldV)=>{
+       })*/
+
+   </script>
+</body>
+</html>
